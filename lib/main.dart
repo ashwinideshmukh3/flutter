@@ -8,9 +8,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Clinical Trials App',
+      title: 'Flutter Farm Management',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: LoginPage(),
@@ -19,6 +19,9 @@ class MyApp extends StatelessWidget {
 }
 
 class LoginPage extends StatelessWidget {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,16 +32,17 @@ class LoginPage extends StatelessWidget {
         padding: EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            TextFormField(
+          children: [
+            TextField(
+              controller: _usernameController,
               decoration: InputDecoration(
                 labelText: 'Username',
                 border: OutlineInputBorder(),
               ),
             ),
             SizedBox(height: 16),
-            TextFormField(
+            TextField(
+              controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Password',
@@ -47,19 +51,19 @@ class LoginPage extends StatelessWidget {
             ),
             SizedBox(height: 24),
             ElevatedButton(
-              child: Text('Login'),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ClinicalTrialsListPage()),
+                  MaterialPageRoute(builder: (context) => FarmDetailsPage()),
                 );
               },
+              child: Text('Login'),
             ),
             TextButton(
-              child: Text('Forgot Password?'),
               onPressed: () {
-                // Handle forgot password
+                // Implement forgot password functionality
               },
+              child: Text('Forgot Password?'),
             ),
           ],
         ),
@@ -68,107 +72,62 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class ClinicalTrialsListPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Clinical Trials List'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.account_circle),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => UserProfilePage()),
-              );
-            },
-          ),
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: 10, // Replace with your data source length
-        itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            title: Text('Trial Name $index'),
-            subtitle: Text('Description of trial $index'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TrialDetailsPage()),
-              );
-            },
-            trailing: ElevatedButton(
-              child: Text('Join Trial'),
-              onPressed: () {
-                // Handle join trial
-              },
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
+class FarmDetailsPage extends StatelessWidget {
+  final TextEditingController _farmDetailsController = TextEditingController();
+  final TextEditingController _cropDetailsController = TextEditingController();
 
-class TrialDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Trial Details'),
+        title: Text('Farm & Crop Details'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Text('Trial Name', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            Text('Description of the trial...'),
-            SizedBox(height: 8),
-            Text('Schedule: ...'),
-            SizedBox(height: 8),
-            Text('Location: ...'),
-            SizedBox(height: 8),
-            Text('Eligibility Criteria: ...'),
+          children: [
+            TextField(
+              controller: _farmDetailsController,
+              decoration: InputDecoration(
+                labelText: 'Farm Details',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 3,
+            ),
+            SizedBox(height: 16),
+            TextField(
+              controller: _cropDetailsController,
+              decoration: InputDecoration(
+                labelText: 'Crop Details for Last 2 Years',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 5,
+            ),
             SizedBox(height: 24),
             ElevatedButton(
-              child: Text('Join Trial'),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserProfilePage()),
+                // Save the farm and crop details
+                // Suggest cover crop for the next year
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Success'),
+                      content: Text('Details saved! Suggested cover crop for next year: Clover.'),
+                      actions: [
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 );
               },
+              child: Text('Save'),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class UserProfilePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('User Profile'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Text('User Details', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            // Add user details here
-            Text('Joined Trials:'),
-            // Add joined trials list here
-            // Add schedule here
-            // Add reporting outcomes here
-            // Add communication with research team here
           ],
         ),
       ),
